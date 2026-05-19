@@ -1,30 +1,60 @@
-import "@/global.css";
-import { Link } from "expo-router";
-import { Text } from "react-native";
+import ListHeading from "@/components/ListHeading";
+import SubscriptionCard from "@/components/SubscriptionCard";
+import { HOME_BALANCE, HOME_SUBSCRIPTIONS } from "@/constants/data";
+import { icons } from "@/constants/icons";
+import images from "@/constants/images";
+import { formatCurrency } from "@/lib/utils";
+import dayjs from "dayjs";
+import { useState } from "react";
+import { Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function App() {
+  const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<
+    string | null
+  >(null);
   return (
     <SafeAreaView className="flex-1 bg-background p-5">
-      <Text className="text-5xl font-sans-extrabold">Home</Text>
-      <Link
-        href="/onboarding"
-        className="mt-4 font-sans-bold text-lg bg-primary text-white px-4 py-2 rounded"
-      >
-        Get Started
-      </Link>
-      <Link
-        href="/(auth)/sign-in"
-        className="mt-4 font-sans-bold text-lg bg-primary text-white px-4 py-2 rounded"
-      >
-        Sign In
-      </Link>
-      <Link
-        href="/(auth)/sign-up"
-        className="mt-4 font-sans-bold text-lg bg-primary text-white px-4 py-2 rounded"
-      >
-        Create Account
-      </Link>
+      <View className="home-header">
+        <View className="home-user">
+          <Image source={images.avatar} className="home-avatar" />
+        </View>
+      </View>
+      <Image source={icons.add} className="home-add-icon" />
+
+      <View className="home-balance-card">
+        <Text className="home-balance-label">Total Balance</Text>
+        <View className="home-balance-row">
+          <Text className="home-balance-amount">
+            {formatCurrency(HOME_BALANCE.amount)}
+          </Text>
+          <Text className="home-balance-date">
+            {dayjs(HOME_BALANCE.nextRenewalDate).format("MM/DD")}
+          </Text>
+        </View>
+      </View>
+
+      {/* <View>
+        <ListHeading title="Upcoming" />
+        <FlatList
+          data={UPCOMING_SUBSCRIPTIONS}
+          renderItem={({ item }) => <UpcomingSubscriptionCard {...item} />}
+          keyExtractor={(item) => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          ListEmptyComponent={
+            <Text className="home-empty-state">No upcoming subscriptions</Text>
+          }
+        />
+      </View> */}
+      <View>
+        <ListHeading title="All Subscriptions" />
+        <SubscriptionCard
+          {...HOME_SUBSCRIPTIONS[0]}
+          expanded={expandedSubscriptionId === HOME_SUBSCRIPTIONS[0].id}
+          onPress={() => setExpandedSubscriptionId((currentId) => currentId === HOME_SUBSCRIPTIONS[0].id ? null : HOME_SUBSCRIPTIONS[0].id)}
+        />
+      </View>
     </SafeAreaView>
   );
 }

@@ -1,3 +1,4 @@
+import "@/global.css";
 import {
   DarkTheme,
   DefaultTheme,
@@ -16,6 +17,8 @@ export const unstable_settings = {
 };
 
 export default function RootLayout() {
+  const colorScheme = useColorScheme();
+
   const [fontsLoaded] = Font.useFonts({
     "sans-regular": require("../assets/fonts/PlusJakartaSans-Regular.ttf"),
     "sans-light": require("../assets/fonts/PlusJakartaSans-Light.ttf"),
@@ -35,16 +38,10 @@ export default function RootLayout() {
     return null;
   }
 
-  const colorScheme = useColorScheme();
-
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="modal"
-          options={{ presentation: "modal", title: "Modal" }}
-        />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
