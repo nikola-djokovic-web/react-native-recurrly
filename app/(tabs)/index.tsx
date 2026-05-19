@@ -1,6 +1,11 @@
 import ListHeading from "@/components/ListHeading";
 import SubscriptionCard from "@/components/SubscriptionCard";
-import { HOME_BALANCE, HOME_SUBSCRIPTIONS, UPCOMING_SUBSCRIPTIONS } from "@/constants/data";
+import UpcomingSubscriptionCard from "@/components/UpcomingSubscriptionCard";
+import {
+  HOME_BALANCE,
+  HOME_SUBSCRIPTIONS,
+  UPCOMING_SUBSCRIPTIONS,
+} from "@/constants/data";
 import { icons } from "@/constants/icons";
 import images from "@/constants/images";
 import { formatCurrency } from "@/lib/utils";
@@ -8,7 +13,6 @@ import dayjs from "dayjs";
 import { useState } from "react";
 import { FlatList, Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import UpcomingSubscriptionCard from "@/components/UpcomingSubscriptionCard";
 
 export default function App() {
   const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<
