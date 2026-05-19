@@ -20,8 +20,8 @@ export default function App() {
         <View className="home-user">
           <Image source={images.avatar} className="home-avatar" />
         </View>
+        <Image source={icons.add} className="home-add-icon" />
       </View>
-      <Image source={icons.add} className="home-add-icon" />
 
       <View className="home-balance-card">
         <Text className="home-balance-label">Total Balance</Text>
