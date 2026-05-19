@@ -1,13 +1,14 @@
 import ListHeading from "@/components/ListHeading";
 import SubscriptionCard from "@/components/SubscriptionCard";
-import { HOME_BALANCE, HOME_SUBSCRIPTIONS } from "@/constants/data";
+import { HOME_BALANCE, HOME_SUBSCRIPTIONS, UPCOMING_SUBSCRIPTIONS } from "@/constants/data";
 import { icons } from "@/constants/icons";
 import images from "@/constants/images";
 import { formatCurrency } from "@/lib/utils";
 import dayjs from "dayjs";
 import { useState } from "react";
-import { Image, Text, View } from "react-native";
+import { FlatList, Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import UpcomingSubscriptionCard from "@/components/UpcomingSubscriptionCard";
 
 export default function App() {
   const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<
@@ -34,7 +35,7 @@ export default function App() {
         </View>
       </View>
 
-      {/* <View>
+      <View>
         <ListHeading title="Upcoming" />
         <FlatList
           data={UPCOMING_SUBSCRIPTIONS}
@@ -46,13 +47,19 @@ export default function App() {
             <Text className="home-empty-state">No upcoming subscriptions</Text>
           }
         />
-      </View> */}
+      </View>
       <View>
         <ListHeading title="All Subscriptions" />
         <SubscriptionCard
           {...HOME_SUBSCRIPTIONS[0]}
           expanded={expandedSubscriptionId === HOME_SUBSCRIPTIONS[0].id}
-          onPress={() => setExpandedSubscriptionId((currentId) => currentId === HOME_SUBSCRIPTIONS[0].id ? null : HOME_SUBSCRIPTIONS[0].id)}
+          onPress={() =>
+            setExpandedSubscriptionId((currentId) =>
+              currentId === HOME_SUBSCRIPTIONS[0].id
+                ? null
+                : HOME_SUBSCRIPTIONS[0].id,
+            )
+          }
         />
       </View>
     </SafeAreaView>

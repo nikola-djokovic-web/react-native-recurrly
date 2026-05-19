@@ -24,7 +24,7 @@
   }
 
   .home-balance-card {
-    @apply my-2.5 justify-between gap-5 rounded-bl-4xl rounded-tr-4xl bg-accent p-6;
+    @apply my-2.5 justify-between gap-5 rounded-bl-3xl rounded-tr-3xl bg-accent p-6;
   }
 
   .home-balance-label {
