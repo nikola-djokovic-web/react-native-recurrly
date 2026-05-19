@@ -28,7 +28,7 @@ export default function App() {
         Create Account
       </Link>
       <Link
-        href="/subscriptions"
+        href="/subscriptions/spotify"
         className="mt-4 text-lg bg-primary text-white px-4 py-2 rounded"
       >
         Spotify Subscriptions
