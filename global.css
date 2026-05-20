@@ -76,7 +76,7 @@
   }
 
   .upcoming-card {
-    @apply mr-4 rounded-3xl bg-card p-4;
+    @apply mr-4 w-44 rounded-2xl bg-card p-4;
   }
 
   .upcoming-row {
@@ -84,7 +84,7 @@
   }
 
   .upcoming-icon {
-    @apply size-12;
+    @apply size-14;
   }
 
   .upcoming-price {
