@@ -1,4 +1,6 @@
 import "@/global.css";
+import { ClerkProvider } from "@clerk/expo";
+import { tokenCache } from "@clerk/expo/token-cache";
 import {
   DarkTheme,
   DefaultTheme,
@@ -15,6 +17,14 @@ import { useEffect } from "react";
 export const unstable_settings = {
   anchor: "(tabs)",
 };
+
+const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
+if (!publishableKey) {
+  throw new Error(
+    "Add your Clerk Publishable Key to the .env file as EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY",
+  );
+}
 
 SplashScreen.preventAutoHideAsync();
 
@@ -41,11 +51,13 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
+    <ClerkProvider publishableKey={publishableKey!} tokenCache={tokenCache}>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
+      </ThemeProvider>
       <StatusBar style="auto" />
-    </ThemeProvider>
+    </ClerkProvider>
   );
 }

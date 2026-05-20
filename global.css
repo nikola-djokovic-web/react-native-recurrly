@@ -199,6 +199,58 @@
     @apply grow px-5 pb-10 pt-8;
   }
 
+  .auth-card {
+    @apply rounded-[32px] border border-border bg-card px-6 py-8 shadow-sm;
+  }
+
+  .auth-heading {
+    @apply text-3xl font-sans-extrabold text-primary;
+  }
+
+  .auth-subtitle {
+    @apply mt-3 text-base font-sans-medium text-muted-foreground;
+  }
+
+  .auth-label {
+    @apply mt-6 mb-2 text-sm font-sans-semibold text-primary;
+  }
+
+  .auth-input {
+    @apply rounded-3xl border border-border bg-white px-4 py-4 text-base text-primary;
+  }
+
+  .auth-button {
+    @apply mt-8 rounded-3xl bg-accent px-5 py-4 items-center;
+  }
+
+  .auth-button-text {
+    @apply font-sans-bold text-base text-white;
+  }
+
+  .auth-secondary-button {
+    @apply mt-3 rounded-3xl border border-border bg-transparent px-5 py-4 items-center;
+  }
+
+  .auth-secondary-button-text {
+    @apply font-sans-semibold text-base text-primary;
+  }
+
+  .auth-link-row {
+    @apply mt-6 flex-row flex-wrap items-center justify-center gap-2;
+  }
+
+  .auth-link {
+    @apply font-sans-semibold text-accent;
+  }
+
+  .auth-error {
+    @apply mt-2 text-sm text-destructive;
+  }
+
+  .auth-meta {
+    @apply mt-4 text-sm font-sans-medium text-muted-foreground;
+  }
+
   .auth-brand-block {
     @apply mt-2 items-center;
   }
