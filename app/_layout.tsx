@@ -16,6 +16,8 @@ export const unstable_settings = {
   anchor: "(tabs)",
 };
 
+SplashScreen.preventAutoHideAsync();
+
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 
