@@ -3,7 +3,11 @@ import React from "react";
 import { Image, Text, View } from "react-native";
 
 const UpcomingSubscriptionCard = ({
-  name, price, daysLeft, icon, currency
+  name,
+  price,
+  daysLeft,
+  icon,
+  currency,
 }: UpcomingSubscription) => {
   return (
     <View className="upcoming-card">
@@ -15,7 +19,13 @@ const UpcomingSubscriptionCard = ({
             {formatCurrency(price, currency)}
           </Text>
           <Text className="upcoming-meta" numberOfLines={1}>
-            {daysLeft > 1 ? `${daysLeft} days left` : "Last day"}
+            {daysLeft > 1
+              ? `${daysLeft} days left`
+              : daysLeft === 1
+                ? "Last day"
+                : daysLeft === 0
+                  ? "Due today"
+                  : `${Math.abs(daysLeft)} day${Math.abs(daysLeft) === 1 ? "" : "s"} overdue`}
           </Text>
         </View>
       </View>

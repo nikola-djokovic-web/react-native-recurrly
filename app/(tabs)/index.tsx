@@ -9,15 +9,25 @@ import {
 import { icons } from "@/constants/icons";
 import images from "@/constants/images";
 import { formatCurrency } from "@/lib/utils";
+import { useUser } from "@clerk/expo";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { FlatList, Image, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { usePostHog } from "posthog-react-native";
 
 export default function App() {
+  const { user } = useUser();
+  const posthog = usePostHog();
   const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<
     string | null
   >(null);
+  const displayName =
+    user?.firstName ||
+    user?.fullName ||
+    user?.emailAddresses[0]?.emailAddress ||
+    "User";
+
   return (
     <SafeAreaView className="flex-1 bg-background p-5">
       <FlatList
@@ -25,7 +35,17 @@ export default function App() {
           <>
             <View className="home-header">
               <View className="home-user">
-                <Image source={images.avatar} className="home-avatar" />
+                <Image
+                  source={
+                    user?.imageUrl ? { uri: user.imageUrl } : images.avatar
+                  }
+                  className="home-avatar"
+                />
+                <Text className="home-user-name">
+                  {displayName.length > 20
+                    ? `${displayName.substring(0, 20)}...`
+                    : displayName}
+                </Text>
               </View>
               <Image source={icons.add} className="home-add-icon" />
             </View>
@@ -69,11 +89,18 @@ export default function App() {
           <SubscriptionCard
             {...item}
             expanded={expandedSubscriptionId === item.id}
-            onPress={() =>
+            onPress={() => {
+              const isExpanding = expandedSubscriptionId !== item.id;
               setExpandedSubscriptionId((currentId) =>
                 currentId === item.id ? null : item.id,
-              )
-            }
+              );
+              if (isExpanding) {
+                posthog.capture("subscription_expanded", {
+                  subscription_id: item.id,
+                  subscription_name: item.name,
+                });
+              }
+            }}
           />
         )}
         keyExtractor={(item) => item.id}

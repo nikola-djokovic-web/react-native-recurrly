@@ -1,4 +1,7 @@
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 export const formatCurrency = (value: number, currency = "USD"): string => {
   try {
@@ -15,7 +18,7 @@ export const formatCurrency = (value: number, currency = "USD"): string => {
 
 export const formatSubscriptionDateTime = (value?: string): string => {
   if (!value) return "Not provided";
-  const parsedDate = dayjs(value);
+  const parsedDate = dayjs.utc(value);
   return parsedDate.isValid()
     ? parsedDate.format("MM/DD/YYYY")
     : "Not provided";

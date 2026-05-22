@@ -1,20 +1,22 @@
 import { useSignUp } from "@clerk/expo";
 import { type Href, Link, useRouter } from "expo-router";
 import React, { useState } from "react";
+import { usePostHog } from "posthog-react-native";
 import {
-    KeyboardAvoidingView,
-    Platform,
-    Pressable,
-    SafeAreaView,
-    ScrollView,
-    Text,
-    TextInput,
-    View,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
 } from "react-native";
 
 export default function SignUp() {
   const { signUp, errors, fetchStatus } = useSignUp();
   const router = useRouter();
+  const posthog = usePostHog();
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
@@ -26,6 +28,16 @@ export default function SignUp() {
         if (session?.currentTask) {
           return;
         }
+
+        const userId = session?.user?.id;
+        const email = session?.user?.primaryEmailAddress?.emailAddress;
+        if (userId) {
+          posthog.identify(userId, {
+            $set: { email },
+            $set_once: { first_signup_date: new Date().toISOString() },
+          });
+        }
+        posthog.capture("user_signed_up", { email });
 
         const url = decorateUrl("/");
         router.replace(url as Href);

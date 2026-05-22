@@ -1,20 +1,22 @@
 import { useSignIn } from "@clerk/expo";
 import { type Href, Link, useRouter } from "expo-router";
 import React, { useState } from "react";
+import { usePostHog } from "posthog-react-native";
 import {
-    KeyboardAvoidingView,
-    Platform,
-    Pressable,
-    SafeAreaView,
-    ScrollView,
-    Text,
-    TextInput,
-    View,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
 } from "react-native";
 
 export default function SignIn() {
   const { signIn, errors, fetchStatus } = useSignIn();
   const router = useRouter();
+  const posthog = usePostHog();
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
@@ -36,6 +38,13 @@ export default function SignIn() {
         if (session?.currentTask) {
           return;
         }
+
+        const userId = session?.user?.id;
+        const email = session?.user?.primaryEmailAddress?.emailAddress;
+        if (userId) {
+          posthog.identify(userId, { $set: { email } });
+        }
+        posthog.capture("user_signed_in", { email });
 
         const url = decorateUrl("/");
         router.replace(url as Href);
@@ -69,9 +78,7 @@ export default function SignIn() {
       return;
     }
 
-    if (signIn.status !== "complete") {
-      setGeneralError("We couldn’t sign you in. Please try again.");
-    }
+    setGeneralError("We couldn’t sign you in. Please try again.");
   };
 
   const handleVerify = async () => {
