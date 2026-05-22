@@ -69,7 +69,7 @@ export default function RootLayout() {
     <ClerkProvider publishableKey={publishableKey!} tokenCache={tokenCache}>
       <PostHogProvider client={posthog} autocapture={{ captureScreens: false, captureTouches: true }}>
         <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-          <Stack>
+          <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           </Stack>
         </ThemeProvider>
