@@ -183,6 +183,26 @@
     @apply py-4 text-sm font-sans-medium text-black/60;
   }
 
+  .subscriptions-header {
+    @apply mb-4 flex-row items-end justify-between;
+  }
+
+  .subscriptions-title {
+    @apply text-3xl font-sans-extrabold text-primary;
+  }
+
+  .subscriptions-count {
+    @apply pb-1 text-sm font-sans-semibold text-muted-foreground;
+  }
+
+  .subscriptions-search {
+    @apply rounded-2xl border border-border bg-card px-4 py-4 text-base font-sans-medium text-primary;
+  }
+
+  .subscriptions-empty {
+    @apply rounded-2xl border border-border bg-card px-4 py-6 text-center text-base font-sans-semibold text-muted-foreground;
+  }
+
   .auth-safe-area {
     @apply flex-1 bg-background;
   }
