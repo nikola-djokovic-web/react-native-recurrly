@@ -52,6 +52,8 @@ declare global {
 
   interface ListHeadingProps {
     title: string;
+    actionLabel?: string;
+    onActionPress?: () => void;
   }
 }
 

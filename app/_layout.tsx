@@ -15,6 +15,7 @@ import { PostHogProvider } from "posthog-react-native";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useEffect, useRef } from "react";
 import { posthog } from "@/src/config/posthog";
+import { SubscriptionsProvider } from "@/src/context/subscriptions";
 
 export const unstable_settings = {
   anchor: "(tabs)",
@@ -68,11 +69,13 @@ export default function RootLayout() {
   return (
     <ClerkProvider publishableKey={publishableKey!} tokenCache={tokenCache}>
       <PostHogProvider client={posthog} autocapture={{ captureScreens: false, captureTouches: true }}>
-        <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          </Stack>
-        </ThemeProvider>
+        <SubscriptionsProvider>
+          <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            </Stack>
+          </ThemeProvider>
+        </SubscriptionsProvider>
         <StatusBar style="auto" />
       </PostHogProvider>
     </ClerkProvider>

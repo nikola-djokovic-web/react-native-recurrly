@@ -363,8 +363,20 @@
     @apply text-lg font-sans-bold text-primary;
   }
 
+  .modal-scroll {
+    @apply flex-shrink;
+  }
+
   .modal-body {
-    @apply gap-5 p-5;
+    @apply gap-3 p-5 pb-8;
+  }
+
+  .modal-label {
+    @apply text-sm font-sans-semibold text-primary;
+  }
+
+  .modal-submit {
+    @apply mt-2;
   }
 
   .picker-row {

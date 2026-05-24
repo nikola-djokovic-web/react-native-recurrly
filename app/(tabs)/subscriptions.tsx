@@ -1,12 +1,18 @@
+import CreateSubscriptionModal from "@/components/CreateSubscriptionModal";
 import ListHeading from "@/components/ListHeading";
 import SubscriptionCard from "@/components/SubscriptionCard";
-import { HOME_SUBSCRIPTIONS } from "@/constants/data";
+import { icons } from "@/constants/icons";
+import { useSubscriptions } from "@/src/context/subscriptions";
+import { usePostHog } from "posthog-react-native";
 import { useMemo, useState } from "react";
-import { FlatList, Text, TextInput, View } from "react-native";
+import { FlatList, Image, Pressable, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Subscriptions = () => {
+  const { subscriptions, addSubscription } = useSubscriptions();
+  const posthog = usePostHog();
   const [searchQuery, setSearchQuery] = useState("");
+  const [createModalVisible, setCreateModalVisible] = useState(false);
   const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<
     string | null
   >(null);
@@ -15,10 +21,10 @@ const Subscriptions = () => {
     const query = searchQuery.trim().toLowerCase();
 
     if (!query) {
-      return HOME_SUBSCRIPTIONS;
+      return subscriptions;
     }
 
-    return HOME_SUBSCRIPTIONS.filter((subscription) =>
+    return subscriptions.filter((subscription) =>
       [
         subscription.name,
         subscription.plan,
@@ -30,7 +36,7 @@ const Subscriptions = () => {
         .filter(Boolean)
         .some((value) => value!.toLowerCase().includes(query)),
     );
-  }, [searchQuery]);
+  }, [searchQuery, subscriptions]);
 
   return (
     <SafeAreaView className="flex-1 bg-background p-5">
@@ -38,10 +44,15 @@ const Subscriptions = () => {
         ListHeaderComponent={
           <>
             <View className="subscriptions-header">
-              <Text className="subscriptions-title">Subscriptions</Text>
-              <Text className="subscriptions-count">
-                {filteredSubscriptions.length} of {HOME_SUBSCRIPTIONS.length}
-              </Text>
+              <View>
+                <Text className="subscriptions-title">Subscriptions</Text>
+                <Text className="subscriptions-count">
+                  {filteredSubscriptions.length} of {subscriptions.length}
+                </Text>
+              </View>
+              <Pressable onPress={() => setCreateModalVisible(true)}>
+                <Image source={icons.add} className="home-add-icon" />
+              </Pressable>
             </View>
 
             <TextInput
@@ -79,6 +90,22 @@ const Subscriptions = () => {
         showsVerticalScrollIndicator={false}
         extraData={expandedSubscriptionId}
         contentContainerClassName="pb-30"
+      />
+      <CreateSubscriptionModal
+        visible={createModalVisible}
+        onClose={() => setCreateModalVisible(false)}
+        onCreate={(subscription) => {
+          addSubscription(subscription);
+          posthog.capture("subscription_created", {
+            subscription_id: subscription.id,
+            subscription_name: subscription.name,
+            category: subscription.category,
+            frequency: subscription.frequency,
+            price: subscription.price,
+            currency: subscription.currency,
+            source: "subscriptions_screen",
+          });
+        }}
       />
     </SafeAreaView>
   );
