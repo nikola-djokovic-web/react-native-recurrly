@@ -1,9 +1,9 @@
 import { useAuth, useUser } from "@clerk/expo";
 import { useRouter } from "expo-router";
+import { usePostHog } from "posthog-react-native";
 import React from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { usePostHog } from "posthog-react-native";
 
 import images from "@/constants/images";
 
@@ -13,10 +13,14 @@ const Settings = () => {
   const router = useRouter();
   const posthog = usePostHog();
 
+  const fullName = [user?.firstName, user?.lastName]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
   const displayName =
-    user?.firstName + " " + user?.lastName ||
+    fullName ||
     user?.fullName ||
-    user?.emailAddresses[0]?.emailAddress ||
+    user?.primaryEmailAddress?.emailAddress ||
     "User";
 
   const joinedDate = user?.createdAt

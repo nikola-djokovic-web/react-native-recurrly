@@ -1,15 +1,19 @@
 import { Link, useLocalSearchParams } from "expo-router";
+import { usePostHog } from "posthog-react-native";
 import React, { useEffect } from "react";
 import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { usePostHog } from "posthog-react-native";
 
 const SubscriptionDetails = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const posthog = usePostHog();
 
   useEffect(() => {
-    posthog.capture("subscription_details_viewed", { subscription_id: id });
+    const subscriptionId = Array.isArray(id) ? id[0] : id;
+    if (!subscriptionId) return;
+    posthog.capture("subscription_details_viewed", {
+      subscription_id: subscriptionId,
+    });
   }, [id, posthog]);
 
   return (
