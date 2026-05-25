@@ -3,22 +3,6 @@
 @tailwind utilities;
 
 @layer components {
-  .tabs-icon {
-    @apply size-12 items-center justify-center;
-  }
-
-  .tabs-pill {
-    @apply size-12 items-center justify-center rounded-full bg-transparent;
-  }
-
-  .tabs-active {
-    @apply bg-accent;
-  }
-
-  .tabs-glyph {
-    @apply size-6;
-  }
-
   .home-header {
     @apply mb-2.5 flex-row items-center justify-between;
   }
@@ -40,7 +24,7 @@
   }
 
   .home-balance-card {
-    @apply my-2.5 min-h-50 justify-between gap-5 rounded-bl-4xl rounded-tr-4xl bg-accent p-6;
+    @apply my-2.5 justify-between gap-5 rounded-bl-3xl rounded-tr-3xl bg-accent p-6;
   }
 
   .home-balance-label {
@@ -75,8 +59,24 @@
     @apply text-lg font-sans-semibold text-primary;
   }
 
+  .tabs-icon {
+    @apply size-12 items-center justify-center;
+  }
+
+  .tabs-pill {
+    @apply size-12 items-center justify-center rounded-full bg-transparent;
+  }
+
+  .tabs-active {
+    @apply bg-accent;
+  }
+
+  .tabs-glyph {
+    @apply size-6;
+  }
+
   .upcoming-card {
-    @apply mr-4 w-44 rounded-2xl border border-black/10 bg-background p-4;
+    @apply mr-4 h-36 w-48 rounded-2xl bg-card p-4;
   }
 
   .upcoming-row {
@@ -84,7 +84,11 @@
   }
 
   .upcoming-icon {
-    @apply size-14;
+    @apply size-12 shrink-0 rounded-lg;
+  }
+
+  .upcoming-copy {
+    @apply min-w-0 flex-1;
   }
 
   .upcoming-price {
@@ -92,11 +96,11 @@
   }
 
   .upcoming-meta {
-    @apply text-sm font-sans-semibold text-muted-foreground;
+    @apply text-sm font-sans-medium text-muted-foreground;
   }
 
   .upcoming-name {
-    @apply mt-2 text-lg font-sans-bold text-primary;
+    @apply mt-auto text-base font-sans-semibold text-primary;
   }
 
   .sub-card {
@@ -183,6 +187,122 @@
     @apply py-4 text-sm font-sans-medium text-black/60;
   }
 
+  .subscriptions-header {
+    @apply mb-4 flex-row items-end justify-between;
+  }
+
+  .subscriptions-title {
+    @apply text-3xl font-sans-extrabold text-primary;
+  }
+
+  .subscriptions-count {
+    @apply pb-1 text-sm font-sans-semibold text-muted-foreground;
+  }
+
+  .subscriptions-search {
+    @apply rounded-2xl border border-border bg-card px-4 py-4 text-base font-sans-medium text-primary;
+  }
+
+  .subscriptions-empty {
+    @apply rounded-2xl border border-border bg-card px-4 py-6 text-center text-base font-sans-semibold text-muted-foreground;
+  }
+
+  .insights-header {
+    @apply mb-5;
+  }
+
+  .insights-title {
+    @apply text-3xl font-sans-extrabold text-primary;
+  }
+
+  .insights-subtitle {
+    @apply mt-2 text-base font-sans-medium text-muted-foreground;
+  }
+
+  .insights-stat-row {
+    @apply mb-4 flex-row gap-4;
+  }
+
+  .insights-stat-card {
+    @apply flex-1 rounded-2xl border border-border bg-card p-4;
+  }
+
+  .insights-stat-primary {
+    @apply bg-accent;
+  }
+
+  .insights-stat-label {
+    @apply text-sm font-sans-semibold text-muted-foreground;
+  }
+
+  .insights-stat-value {
+    @apply mt-2 text-2xl font-sans-extrabold text-primary;
+  }
+
+  .insights-section {
+    @apply mb-4 rounded-2xl border border-border bg-card p-4;
+  }
+
+  .insights-section-title {
+    @apply mb-4 text-lg font-sans-bold text-primary;
+  }
+
+  .insights-bar-row {
+    @apply mb-4;
+  }
+
+  .insights-bar-copy {
+    @apply mb-2 flex-row items-center justify-between gap-4;
+  }
+
+  .insights-bar-label {
+    @apply min-w-0 flex-1 text-sm font-sans-semibold text-primary;
+  }
+
+  .insights-bar-value {
+    @apply text-sm font-sans-bold text-primary;
+  }
+
+  .insights-bar-track {
+    @apply h-3 overflow-hidden rounded-full bg-muted;
+  }
+
+  .insights-bar-fill {
+    @apply h-full rounded-full bg-accent;
+  }
+
+  .insights-list-row {
+    @apply mb-3 flex-row items-center justify-between gap-4 rounded-2xl bg-background p-3;
+  }
+
+  .insights-list-copy {
+    @apply min-w-0 flex-1;
+  }
+
+  .insights-list-title {
+    @apply text-base font-sans-bold text-primary;
+  }
+
+  .insights-list-meta {
+    @apply mt-1 text-sm font-sans-medium text-muted-foreground;
+  }
+
+  .insights-list-price {
+    @apply text-base font-sans-extrabold text-primary;
+  }
+
+  .insights-health-row {
+    @apply mb-3 flex-row items-center justify-between rounded-2xl bg-background p-3;
+  }
+
+  .insights-health-label {
+    @apply text-base font-sans-semibold text-primary;
+  }
+
+  .insights-health-value {
+    @apply text-lg font-sans-extrabold text-primary;
+  }
+
   .auth-safe-area {
     @apply flex-1 bg-background;
   }
@@ -197,6 +317,74 @@
 
   .auth-content {
     @apply grow px-5 pb-10 pt-8;
+  }
+
+  .auth-card {
+    @apply rounded-[32px] border border-border bg-card px-6 py-8 shadow-sm;
+  }
+
+  .auth-heading {
+    @apply text-3xl font-sans-extrabold text-primary;
+  }
+
+  .auth-subtitle {
+    @apply mt-3 text-base font-sans-medium text-muted-foreground;
+  }
+
+  .auth-label {
+    @apply mt-6 mb-2 text-sm font-sans-semibold text-primary;
+  }
+
+  .auth-input {
+    @apply rounded-3xl border border-border bg-white px-4 py-4 text-base text-primary;
+  }
+
+  .auth-password-row {
+    @apply flex-row items-center rounded-3xl border border-border bg-white;
+  }
+
+  .auth-password-input {
+    @apply flex-1 px-4 py-4 text-base text-primary;
+  }
+
+  .auth-password-toggle {
+    @apply px-4 py-4;
+  }
+
+  .auth-password-toggle-text {
+    @apply text-sm font-sans-bold text-accent;
+  }
+
+  .auth-button {
+    @apply mt-8 rounded-3xl bg-accent px-5 py-4 items-center;
+  }
+
+  .auth-button-text {
+    @apply font-sans-bold text-base text-white;
+  }
+
+  .auth-secondary-button {
+    @apply mt-3 rounded-3xl border border-border bg-transparent px-5 py-4 items-center;
+  }
+
+  .auth-secondary-button-text {
+    @apply font-sans-semibold text-base text-primary;
+  }
+
+  .auth-link-row {
+    @apply mt-6 flex-row flex-wrap items-center justify-center gap-2;
+  }
+
+  .auth-link {
+    @apply font-sans-semibold text-accent;
+  }
+
+  .auth-error {
+    @apply mt-2 text-sm text-destructive;
+  }
+
+  .auth-meta {
+    @apply mt-4 text-sm font-sans-medium text-muted-foreground;
   }
 
   .auth-brand-block {
@@ -231,10 +419,6 @@
     @apply mt-2 max-w-[320px] text-center text-base font-sans-medium text-muted-foreground;
   }
 
-  .auth-card {
-    @apply mt-8 rounded-3xl border border-border bg-card p-5;
-  }
-
   .auth-form {
     @apply gap-4;
   }
@@ -243,44 +427,16 @@
     @apply gap-2;
   }
 
-  .auth-label {
-    @apply text-sm font-sans-semibold text-primary;
-  }
-
-  .auth-input {
-    @apply rounded-2xl border border-border bg-background px-4 py-4 text-base font-sans-medium text-primary;
-  }
-
   .auth-input-error {
     @apply border-destructive;
-  }
-
-  .auth-error {
-    @apply text-xs font-sans-medium text-destructive;
   }
 
   .auth-helper {
     @apply text-sm font-sans-medium text-muted-foreground;
   }
 
-  .auth-button {
-    @apply mt-1 items-center rounded-2xl bg-accent py-4;
-  }
-
   .auth-button-disabled {
     @apply bg-accent/45;
-  }
-
-  .auth-button-text {
-    @apply text-base font-sans-bold text-primary;
-  }
-
-  .auth-secondary-button {
-    @apply items-center rounded-2xl border border-accent/30 bg-accent/10 py-3;
-  }
-
-  .auth-secondary-button-text {
-    @apply text-sm font-sans-semibold text-accent;
   }
 
   .auth-divider-row {
@@ -295,16 +451,8 @@
     @apply text-[11px] font-sans-semibold uppercase tracking-[1px] text-muted-foreground;
   }
 
-  .auth-link-row {
-    @apply mt-5 flex-row items-center justify-center gap-1;
-  }
-
   .auth-link-copy {
     @apply text-sm font-sans-medium text-muted-foreground;
-  }
-
-  .auth-link {
-    @apply text-sm font-sans-bold text-accent;
   }
 
   .modal-overlay {
@@ -331,8 +479,20 @@
     @apply text-lg font-sans-bold text-primary;
   }
 
+  .modal-scroll {
+    @apply flex-shrink;
+  }
+
   .modal-body {
-    @apply gap-5 p-5;
+    @apply gap-3 p-5 pb-8;
+  }
+
+  .modal-label {
+    @apply text-sm font-sans-semibold text-primary;
+  }
+
+  .modal-submit {
+    @apply mt-2;
   }
 
   .picker-row {
