@@ -19,6 +19,7 @@ export default function SignUp() {
   const posthog = usePostHog();
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [code, setCode] = useState("");
   const [generalError, setGeneralError] = useState("");
 
@@ -165,15 +166,25 @@ export default function SignUp() {
                 )}
 
                 <Text className="auth-label">Password</Text>
-                <TextInput
-                  className="auth-input"
-                  value={password}
-                  placeholder="Create a strong password"
-                  placeholderTextColor="#8a8a8a"
-                  secureTextEntry
-                  onChangeText={setPassword}
-                  textContentType="newPassword"
-                />
+                <View className="auth-password-row">
+                  <TextInput
+                    className="auth-password-input"
+                    value={password}
+                    placeholder="Create a strong password"
+                    placeholderTextColor="#8a8a8a"
+                    secureTextEntry={!passwordVisible}
+                    onChangeText={setPassword}
+                    textContentType="newPassword"
+                  />
+                  <Pressable
+                    className="auth-password-toggle"
+                    onPress={() => setPasswordVisible((visible) => !visible)}
+                  >
+                    <Text className="auth-password-toggle-text">
+                      {passwordVisible ? "Hide" : "Show"}
+                    </Text>
+                  </Pressable>
+                </View>
                 {errors.fields.password && (
                   <Text className="auth-error">
                     {errors.fields.password.message}

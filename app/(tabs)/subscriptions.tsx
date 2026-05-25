@@ -3,6 +3,8 @@ import ListHeading from "@/components/ListHeading";
 import SubscriptionCard from "@/components/SubscriptionCard";
 import { icons } from "@/constants/icons";
 import { useSubscriptions } from "@/src/context/subscriptions";
+import dayjs from "dayjs";
+import { useLocalSearchParams } from "expo-router";
 import { usePostHog } from "posthog-react-native";
 import { useMemo, useState } from "react";
 import { FlatList, Image, Pressable, Text, TextInput, View } from "react-native";
@@ -10,6 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const Subscriptions = () => {
   const { subscriptions, addSubscription } = useSubscriptions();
+  const { filter } = useLocalSearchParams<{ filter?: string }>();
   const posthog = usePostHog();
   const [searchQuery, setSearchQuery] = useState("");
   const [createModalVisible, setCreateModalVisible] = useState(false);
@@ -17,14 +20,37 @@ const Subscriptions = () => {
     string | null
   >(null);
 
-  const filteredSubscriptions = useMemo(() => {
+  const isUpcomingFilter = filter === "upcoming";
+  const today = dayjs().startOf("day");
+  const screenTitle = isUpcomingFilter
+    ? "All Upcoming Subscriptions"
+    : "Subscriptions";
+  const listTitle = isUpcomingFilter
+    ? "Upcoming Subscriptions"
+    : "All Subscriptions";
+
+  const visibleSubscriptions = useMemo(() => {
+    const baseSubscriptions = isUpcomingFilter
+      ? subscriptions
+          .filter(
+            (subscription) =>
+              subscription.status === "active" &&
+              subscription.renewalDate &&
+              !dayjs(subscription.renewalDate).isBefore(today, "day"),
+          )
+          .sort(
+            (first, second) =>
+              dayjs(first.renewalDate).valueOf() -
+              dayjs(second.renewalDate).valueOf(),
+          )
+      : subscriptions;
     const query = searchQuery.trim().toLowerCase();
 
     if (!query) {
-      return subscriptions;
+      return baseSubscriptions;
     }
 
-    return subscriptions.filter((subscription) =>
+    return baseSubscriptions.filter((subscription) =>
       [
         subscription.name,
         subscription.plan,
@@ -36,7 +62,7 @@ const Subscriptions = () => {
         .filter(Boolean)
         .some((value) => value!.toLowerCase().includes(query)),
     );
-  }, [searchQuery, subscriptions]);
+  }, [isUpcomingFilter, searchQuery, subscriptions, today]);
 
   return (
     <SafeAreaView className="flex-1 bg-background p-5">
@@ -45,9 +71,20 @@ const Subscriptions = () => {
           <>
             <View className="subscriptions-header">
               <View>
-                <Text className="subscriptions-title">Subscriptions</Text>
+                <Text className="subscriptions-title">{screenTitle}</Text>
                 <Text className="subscriptions-count">
-                  {filteredSubscriptions.length} of {subscriptions.length}
+                  {visibleSubscriptions.length} of{" "}
+                  {isUpcomingFilter
+                    ? subscriptions.filter(
+                        (subscription) =>
+                          subscription.status === "active" &&
+                          subscription.renewalDate &&
+                          !dayjs(subscription.renewalDate).isBefore(
+                            today,
+                            "day",
+                          ),
+                      ).length
+                    : subscriptions.length}
                 </Text>
               </View>
               <Pressable onPress={() => setCreateModalVisible(true)}>
@@ -58,7 +95,11 @@ const Subscriptions = () => {
             <TextInput
               value={searchQuery}
               onChangeText={setSearchQuery}
-              placeholder="Search subscriptions"
+              placeholder={
+                isUpcomingFilter
+                  ? "Search upcoming subscriptions"
+                  : "Search subscriptions"
+              }
               placeholderTextColor="rgba(0, 0, 0, 0.45)"
               autoCapitalize="none"
               autoCorrect={false}
@@ -66,10 +107,10 @@ const Subscriptions = () => {
               className="subscriptions-search"
             />
 
-            <ListHeading title="All Subscriptions" />
+            <ListHeading title={listTitle} />
           </>
         }
-        data={filteredSubscriptions}
+        data={visibleSubscriptions}
         renderItem={({ item }) => (
           <SubscriptionCard
             {...item}
@@ -99,10 +140,10 @@ const Subscriptions = () => {
           posthog.capture("subscription_created", {
             subscription_id: subscription.id,
             subscription_name: subscription.name,
-            category: subscription.category,
-            frequency: subscription.frequency,
+            category: subscription.category ?? null,
+            frequency: subscription.frequency ?? null,
             price: subscription.price,
-            currency: subscription.currency,
+            currency: subscription.currency ?? null,
             source: "subscriptions_screen",
           });
         }}

@@ -8,14 +8,18 @@ const UpcomingSubscriptionCard = ({
   daysLeft,
   icon,
   currency,
-}: UpcomingSubscription) => {
+  color,
+}: UpcomingSubscriptionCardProps) => {
   return (
-    <View className="upcoming-card">
+    <View
+      className="upcoming-card"
+      style={color ? { backgroundColor: color } : undefined}
+    >
       <View className="upcoming-row">
         <Image source={icon} className="upcoming-icon" resizeMode="contain" />
 
-        <View>
-          <Text className="upcoming-price">
+        <View className="upcoming-copy">
+          <Text className="upcoming-price" numberOfLines={1}>
             {formatCurrency(price, currency)}
           </Text>
           <Text className="upcoming-meta" numberOfLines={1}>

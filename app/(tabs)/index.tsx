@@ -2,17 +2,14 @@ import ListHeading from "@/components/ListHeading";
 import CreateSubscriptionModal from "@/components/CreateSubscriptionModal";
 import SubscriptionCard from "@/components/SubscriptionCard";
 import UpcomingSubscriptionCard from "@/components/UpcomingSubscriptionCard";
-import {
-  HOME_BALANCE,
-  UPCOMING_SUBSCRIPTIONS,
-} from "@/constants/data";
+import { HOME_BALANCE } from "@/constants/data";
 import { icons } from "@/constants/icons";
 import images from "@/constants/images";
 import { formatCurrency } from "@/lib/utils";
 import { useUser } from "@clerk/expo";
 import dayjs from "dayjs";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { FlatList, Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { usePostHog } from "posthog-react-native";
@@ -32,6 +29,28 @@ export default function App() {
     user?.fullName ||
     user?.emailAddresses[0]?.emailAddress ||
     "User";
+  const upcomingSubscriptions = useMemo(() => {
+    const today = dayjs().startOf("day");
+
+    return subscriptions
+      .filter(
+        (subscription) =>
+          subscription.status === "active" &&
+          subscription.renewalDate &&
+          !dayjs(subscription.renewalDate).isBefore(today, "day"),
+      )
+      .map((subscription) => {
+        const renewalDate = dayjs(subscription.renewalDate);
+
+        return {
+          ...subscription,
+          daysLeft: renewalDate.startOf("day").diff(today, "day"),
+          renewalTime: renewalDate.valueOf(),
+        };
+      })
+      .sort((first, second) => first.renewalTime - second.renewalTime)
+      .slice(0, 8);
+  }, [subscriptions]);
 
   return (
     <SafeAreaView className="flex-1 bg-background p-5">
@@ -70,9 +89,17 @@ export default function App() {
             </View>
 
             <View className="mb-4">
-              <ListHeading title="Upcoming" />
+              <ListHeading
+                title="Upcoming"
+                onActionPress={() =>
+                  router.push({
+                    pathname: "/subscriptions",
+                    params: { filter: "upcoming" },
+                  })
+                }
+              />
               <FlatList
-                data={UPCOMING_SUBSCRIPTIONS}
+                data={upcomingSubscriptions}
                 renderItem={({ item }) => (
                   <UpcomingSubscriptionCard {...item} />
                 )}
@@ -127,10 +154,10 @@ export default function App() {
           posthog.capture("subscription_created", {
             subscription_id: subscription.id,
             subscription_name: subscription.name,
-            category: subscription.category,
-            frequency: subscription.frequency,
+            category: subscription.category ?? null,
+            frequency: subscription.frequency ?? null,
             price: subscription.price,
-            currency: subscription.currency,
+            currency: subscription.currency ?? null,
           });
         }}
       />
